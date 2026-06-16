@@ -62,5 +62,19 @@ router.get("/getdata/:id",async (req,res)=>{
     }
 })
 
+router.get("/getall",async (req,res)=>{
+    try {
+    const updateUser=await User.find();
+    if(!updateUser){
+        res.status(404).send("Your data not found!");
+        console.log('Your data not found!');
+    }
+    res.status(201).json(updateUser);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error!');
+    }
+})
+
 
 export default router;
