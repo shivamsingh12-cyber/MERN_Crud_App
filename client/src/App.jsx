@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import "./App.css"
 import User from "./getUser/user.jsx"
-import AddUser from './addUser/adduser.jsx';
+import AddUser from './addUser/AddUser.jsx';
 import {RouterProvider,createBrowserRouter} from "react-router-dom";
 
 
