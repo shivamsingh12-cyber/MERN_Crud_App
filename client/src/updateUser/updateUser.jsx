@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import "./AddUser.css"
-import {Link, useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import "./updateuser.css"
+import {Link, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
-const AddUser = () => {
+const UpdateUser = () => {
     const users = {
         name:"",
         age:"",
@@ -11,6 +11,18 @@ const AddUser = () => {
     };
     const [user, setUser]=useState(users);
     const navigate = useNavigate();
+
+    const {id} = useParams();
+
+    useEffect(()=>{
+      
+      axios.get(`http://localhost:3000/getdata/${id}`).then((response)=>{
+        setUser(response.data);
+       
+      }).catch((err)=>{
+        console.log(err);
+      });
+    },[id])
 
     const inputHandler = (e)=>{
           const {name,value}=e.target;
@@ -20,8 +32,8 @@ const AddUser = () => {
 
     const submitForm = async (e)=>{
       e.preventDefault();
-      await axios.post("http://localhost:3000/add",user).then((response)=>{
-        console.log('User created Successfully');
+      await axios.put(`http://localhost:3000/update/${id}`,user).then((response)=>{
+        console.log('User updated Successfully');
         navigate("/");
       }).catch((err)=>{
         console.log(err);
@@ -32,13 +44,14 @@ const AddUser = () => {
       <Link to="/" type='button' className='btn btn-secondary'>
         Back <i className="fa-solid fa-backward"></i>
       </Link>
-      <h3>Add New User</h3>
+      <h3>Update User</h3>
       <form className="addUserForm" onSubmit={submitForm}>
         <div className="inputGroup">
           <label htmlFor="name">Name</label>
           <input
            type="text"
            name="name" 
+           value={user.name}
            onChange={inputHandler}
            autoComplete='off' 
            placeholder='Enter your Name'/>
@@ -48,15 +61,20 @@ const AddUser = () => {
           <input 
           type="text" 
           name="age" 
+           value={user.age}
           autoComplete='off' 
           onChange={inputHandler}
           placeholder='Enter your Name'/>
         </div>
         <div className="inputGroup">
           <label htmlFor="gender">Gender</label>
-      Male  <input type="radio" name="gender" value="male" id="" 
+      Male  <input type="radio" name="gender"
+      checked={user.gender === "male"}
+      value="male"  
          onChange={inputHandler} />
-      Female  <input type="radio" name="gender" value="female" id="" 
+      Female  <input type="radio" name="gender"
+        checked={user.gender === "female"}
+      value="female" id="" 
          onChange={inputHandler} />
         </div>
         <div className="inputGroup">
@@ -67,4 +85,4 @@ const AddUser = () => {
   )
 }
 
-export default AddUser
+export default UpdateUser

@@ -33,15 +33,15 @@ router.put("/update/:id",async (req,res)=>{
         res.status(500).send('Internal server error!');
     }
 })
-router.post("/delete/:id",async (req,res)=>{
+router.delete("/delete/:id",async (req,res)=>{
     try {
             const userId = req.params.id;
     const updateUser=await User.findByIdAndDelete(userId);
     if(!updateUser){
-        res.status(404).send("Your item already removed!");
+      return   res.status(404).send("Your item already removed!");
         console.log('Your item already removed!');
     }
-    res.status(201).json('Your data is deleted!');
+    res.status(204).json('Your data is deleted!');
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error!');

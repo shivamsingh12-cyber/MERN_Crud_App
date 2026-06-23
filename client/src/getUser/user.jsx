@@ -18,6 +18,16 @@ const User = () => {
     };
     fetchData();
   },[])
+
+     const deleteUser = async (userId)=>{
+      await axios.delete(`http://localhost:3000/delete/${userId}`).then((response)=>{
+       setUsers((prevUser)=>{
+       return  prevUser.filter((user)=>user._id!==userId)
+       })
+      }).catch((err)=>{
+        console.log(err);
+      })
+    }
   return (
     <>
       <div className="userTable">
@@ -35,12 +45,12 @@ const User = () => {
               <tbody>
                 {users.map((user,index)=>{
                   return (
-                   <tr>
+                   <tr key={user._id}>
                   <td>{index+1}</td>
                   <td>{user.name}</td>
                   <td>{user.age}</td>
                   <td>{user.gender}</td>
-                  <td><button type="button" className="btn btn-primary btn-sm"><i className="fa-solid fa-pen-to-square"></i></button>  <button type="button" className="btn btn-danger btn-sm"><i className="fa-solid fa-trash"></i></button></td>
+                  <td><Link to={`/update/`+user._id} type="button" className="btn btn-primary btn-sm"><i className="fa-solid fa-pen-to-square"></i></Link>  <button onClick={()=>deleteUser(user._id)} type="button" className="btn btn-danger btn-sm"><i className="fa-solid fa-trash"></i></button></td>
                 </tr>
                   )
                 })}
